@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brickwork Payments</title>
+<meta name="description" content="Eurogold bricklayer claims: allowance check, photos, foreman and QS sign-off, live plot ledger and weekly payment run.">
+<style>
+:root {
+  --bg: #f5f4ef; --surface: #ffffff; --surface-2: #f0eee7; --ink: #1b2130; --muted: #5c6472; --line: #e1ddd2;
+  --brand: #1d2a44; --brand-ink: #ffffff; --accent: #d9a200; --accent-soft: #fbf1cf;
+  --ok: #1d7a4b; --ok-soft: #e2f3ea; --warn: #9a5b00; --warn-soft: #fbedd5; --bad: #b42318; --bad-soft: #fde5e2;
+  --info: #2457a6; --info-soft: #e3ecfa; --shadow: 0 1px 2px rgba(20,24,36,.06), 0 4px 14px rgba(20,24,36,.05);
+  --radius: 12px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151c; --surface: #1a1f29; --surface-2: #222835; --ink: #e8eaf0; --muted: #9aa3b2; --line: #2e3544;
+    --brand: #0e1524; --brand-ink: #f2f3f6; --accent: #e8b52a; --accent-soft: #3a3115;
+    --ok: #4cc58a; --ok-soft: #173326; --warn: #f0a640; --warn-soft: #3a2a12; --bad: #ff7a6b; --bad-soft: #3d1c1a;
+    --info: #7fa8ff; --info-soft: #1b2741; --shadow: none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12151c; --surface: #1a1f29; --surface-2: #222835; --ink: #e8eaf0; --muted: #9aa3b2; --line: #2e3544;
+  --brand: #0e1524; --brand-ink: #f2f3f6; --accent: #e8b52a; --accent-soft: #3a3115;
+  --ok: #4cc58a; --ok-soft: #173326; --warn: #f0a640; --warn-soft: #3a2a12; --bad: #ff7a6b; --bad-soft: #3d1c1a;
+  --info: #7fa8ff; --info-soft: #1b2741; --shadow: none; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-text-size-adjust: 100%; }
+a { color: var(--info); }
+h1 { font-size: 1.35rem; margin: 0 0 .25rem; letter-spacing: -.01em; }
+h2 { font-size: 1.05rem; margin: 0 0 .6rem; }
+h3 { font-size: .95rem; margin: 0 0 .5rem; }
+.muted { color: var(--muted); }
+.small { font-size: .85rem; }
+.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+
+/* Header */
+.top { background: var(--brand); color: var(--brand-ink); position: sticky; top: 0; z-index: 20; }
+.top-inner { max-width: 1040px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.logo { display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: .02em; margin-right: auto; }
+.logo .mark { width: 28px; height: 28px; border-radius: 7px; background: var(--accent); color: #1d2a44; display: grid; place-items: center; font-weight: 800; font-size: 14px; }
+.logo small { display: block; font-weight: 500; opacity: .75; font-size: .75rem; letter-spacing: 0; }
+.who { display: flex; gap: 6px; align-items: center; font-size: .85rem; }
+.who select { background: rgba(255,255,255,.1); color: inherit; border: 1px solid rgba(255,255,255,.25); border-radius: 8px; padding: 6px 8px; font: inherit; max-width: 46vw; }
+.who select option { color: #1b2130; }
+.tabs { max-width: 1040px; margin: 0 auto; padding: 0 16px; display: flex; gap: 4px; overflow-x: auto; }
+.tabs a { color: var(--brand-ink); opacity: .75; text-decoration: none; padding: 8px 12px 10px; border-bottom: 3px solid transparent; white-space: nowrap; font-weight: 500; }
+.tabs a.on { opacity: 1; border-color: var(--accent); }
+.demo-strip { background: var(--accent-soft); color: var(--ink); font-size: .8rem; text-align: center; padding: 5px 16px; }
+
+main { max-width: 1040px; margin: 0 auto; padding: 18px 16px 80px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); margin-bottom: 14px; min-width: 0; }
+.card.tight { padding: 12px; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.spread { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; }
+.stat b { display: block; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.stat span { color: var(--muted); font-size: .82rem; }
+.stat.bad b { color: var(--bad); } .stat.warn b { color: var(--warn); }
+
+/* Buttons & inputs */
+.btn { appearance: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; padding: 10px 14px; font: inherit; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; min-height: 42px; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--brand); color: var(--brand-ink); border-color: var(--brand); }
+:root[data-theme="dark"] .btn.primary { background: var(--accent); color: #1b2130; border-color: var(--accent); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { background: var(--accent); color: #1b2130; border-color: var(--accent); } }
+.btn.ok { background: var(--ok); border-color: var(--ok); color: #fff; }
+.btn.danger { color: var(--bad); border-color: var(--bad); }
+.btn.big { width: 100%; justify-content: center; padding: 14px; font-size: 1.05rem; }
+.btn.sm { min-height: 32px; padding: 5px 10px; font-size: .85rem; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+input[type=text], input[type=number], input[type=search], textarea, select.field { width: 100%; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 9px; padding: 9px 10px; }
+input:focus, textarea:focus, select:focus, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+textarea { min-height: 70px; resize: vertical; }
+label.lbl { display: block; font-weight: 600; font-size: .85rem; margin: 10px 0 4px; }
+
+/* Chips */
+.chip { display: inline-flex; align-items: center; gap: 4px; font-size: .75rem; font-weight: 700; padding: 3px 8px; border-radius: 99px; background: var(--surface-2); color: var(--muted); white-space: nowrap; letter-spacing: .01em; }
+.chip.ok { background: var(--ok-soft); color: var(--ok); } .chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); } .chip.info { background: var(--info-soft); color: var(--info); }
+.chip.gold { background: var(--accent-soft); color: var(--warn); }
+
+/* Lists */
+.list { display: flex; flex-direction: column; gap: 8px; }
+.item { display: flex; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); text-decoration: none; color: inherit; }
+.item:hover { border-color: var(--muted); }
+.item .main { flex: 1; min-width: 0; }
+.item .main b { display: block; }
+.item .side { text-align: right; }
+.empty { padding: 22px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; }
+
+/* Tables */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+th { background: var(--surface-2); font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 700; white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+tr.click { cursor: pointer; } tr.click:hover td { background: var(--surface-2); }
+td.over, .t-over { color: var(--bad); font-weight: 700; }
+td.noallow { color: var(--warn); }
+tfoot td { font-weight: 700; background: var(--surface-2); }
+
+.bar { height: 6px; border-radius: 4px; background: var(--surface-2); overflow: hidden; margin-top: 4px; min-width: 60px; display: flex; }
+.bar i { display: block; height: 100%; background: var(--ok); }
+.bar i.p { background: var(--accent); }
+.bar.over i { background: var(--bad); }
+
+/* Claim form */
+.step { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.step .n { width: 26px; height: 26px; border-radius: 50%; background: var(--brand); color: var(--brand-ink); display: grid; place-items: center; font-size: .8rem; font-weight: 700; flex: none; }
+:root[data-theme="dark"] .step .n { background: var(--accent); color: #1b2130; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .step .n { background: var(--accent); color: #1b2130; } }
+.qty-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.qty { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--surface); }
+.qty label { font-size: .8rem; font-weight: 600; display: block; margin-bottom: 4px; }
+.qty .pair { display: flex; gap: 6px; }
+.qty .pair input { padding: 8px; }
+.qty .pair input.c { width: 64px; flex: none; }
+.qty small { color: var(--muted); font-size: .72rem; }
+.qty.has { border-color: var(--accent); background: var(--accent-soft); }
+.yn { display: flex; gap: 0; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; flex: none; }
+.yn label { padding: 7px 14px; cursor: pointer; font-weight: 600; font-size: .85rem; background: var(--surface); }
+.yn input { position: absolute; opacity: 0; pointer-events: none; }
+.yn input:checked + span { color: #fff; }
+.yn label:has(input[value=yes]:checked) { background: var(--ok); color: #fff; }
+.yn label:has(input[value=no]:checked) { background: var(--bad); color: #fff; }
+.check-row { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.check-row:last-child { border-bottom: none; }
+.photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+.photo { position: relative; aspect-ratio: 1; border-radius: 9px; overflow: hidden; background: var(--surface-2); border: 1px solid var(--line); }
+.photo img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; }
+.photo button { position: absolute; top: 4px; right: 4px; border: 0; background: rgba(0,0,0,.6); color: #fff; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 15px; line-height: 1; }
+.addphoto { aspect-ratio: 1; border: 2px dashed var(--line); border-radius: 9px; display: grid; place-items: center; text-align: center; color: var(--muted); font-size: .8rem; font-weight: 600; cursor: pointer; padding: 6px; }
+.addphoto:hover { border-color: var(--accent); color: var(--ink); }
+.plotchips { display: flex; flex-wrap: wrap; gap: 6px; }
+.alert { border-radius: 10px; padding: 10px 12px; font-size: .9rem; margin: 10px 0; border: 1px solid transparent; }
+.alert.bad { background: var(--bad-soft); color: var(--bad); border-color: color-mix(in srgb, var(--bad) 30%, transparent); }
+.alert.warn { background: var(--warn-soft); color: var(--warn); }
+.alert.ok { background: var(--ok-soft); color: var(--ok); }
+.alert.info { background: var(--info-soft); color: var(--info); }
+.alert ul { margin: 6px 0 0; padding-left: 18px; }
+.sticky-total { position: sticky; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); margin: 14px -16px -16px; padding: 12px 16px; border-radius: 0 0 var(--radius) var(--radius); }
+.timeline { list-style: none; padding: 0; margin: 0; }
+.timeline li { padding: 6px 0 6px 18px; position: relative; font-size: .88rem; }
+.timeline li::before { content: ""; position: absolute; left: 3px; top: 13px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; font-size: .9rem; }
+.kv dt { color: var(--muted); } .kv dd { margin: 0; font-weight: 600; }
+
+/* Modal / toast */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.82); display: grid; place-items: center; z-index: 50; padding: 16px; }
+.modal img { max-width: 100%; max-height: 90vh; border-radius: 8px; }
+.toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-weight: 600; z-index: 60; box-shadow: var(--shadow); max-width: calc(100% - 32px); }
+details summary { cursor: pointer; font-weight: 600; }
+.right { margin-left: auto; }
+@media (max-width: 560px) {
+  h1 { font-size: 1.2rem; }
+  .hide-sm { display: none; }
+  .card { padding: 14px; }
+  .sticky-total { margin: 14px -14px -14px; }
+  th, td { padding: 7px 5px; }
+  th { font-size: .66rem; letter-spacing: .02em; }
+  table { font-size: .8rem; }
+  .card { padding: 12px; }
+  .sticky-total { margin: 14px -12px -12px; }
+}
+@media print {
+  .top, .demo-strip, .noprint { display: none !important; }
+  body { background: #fff; color: #000; }
+  .card { box-shadow: none; border-color: #bbb; break-inside: avoid; }
+  main { padding: 0; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="logo"><div class="mark">EG</div><div>Brickwork Payments<small id="siteName"></small></div></div>
+    <div class="who" id="who"></div>
+  </div>
+  <nav class="tabs" id="tabs"></nav>
+</header>
+<div class="demo-strip">Prototype with real EG587 data. Use "Viewing as" to switch between bricklayer, foreman, QS and Accounts. Changes are saved on this device only.</div>
+<main id="app"></main>
+<div id="layer"></div>
+
+<script src="data.js"></script>
+<script>
+"use strict";
+const SEED = window.SEED;
+const ITEMS = SEED.items;
+const ITEM = Object.fromEntries(ITEMS.map(i => [i.key, i]));
+const COURSE_ITEMS = ["t355", "t300", "b140", "b100", "commons", "facings"];
+const POOLS = [
+  { key: "trench", label: "Trench block", items: ["t355", "t300"] },
+  { key: "commons", label: "Commons", items: ["commons"] },
+  { key: "facings", label: "Facings / eng.", items: ["facings"] },
+  { key: "b100", label: "100mm block", items: ["b100"] },
+  { key: "b140", label: "140mm block", items: ["b140"] },
+];
+const POOL = Object.fromEntries(POOLS.map(p => [p.key, p]));
+const POOL_OF = {}; POOLS.forEach(p => p.items.forEach(i => POOL_OF[i] = p.key));
+const NO_POOL_ITEMS = ITEMS.map(i => i.key).filter(k => !POOL_OF[k]);
+const PLOT = Object.fromEntries(SEED.plots.map(p => [p.no, p]));
+const BRICK_CHECKS = [
+  ["concrete", "Concrete to foundation to an acceptable working level"],
+  ["depth", "Foundation to a workable depth"],
+  ["nails", "Engineer's nails checked and within tolerance"],
+  ["drawing", "Relevant foundation drawing issued"],
+];
+const FOREMAN_CHECKS = [
+  ["standard", "Block and brickwork built to an excellent standard"],
+  ["levels", "Brickwork levels checked and within tolerance"],
+  ["lengths", "Brickwork lengths checked and within tolerance"],
+  ["diagonals", "Brickwork diagonals checked and within tolerance"],
+  ["mortarTop", "Top of brickwork filled in with mortar"],
+  ["cavities", "Cavities free from mortar"],
+  ["drainage", "Drainage ducting installed to drawing"],
+];
+const STATUS = {
+  draft: ["Draft", ""],
+  submitted: ["Waiting for foreman", "info"],
+  foreman_approved: ["Waiting for QS", "gold"],
+  approved: ["Approved, in ledger", "ok"],
+  rejected: ["Rejected, needs fixing", "bad"],
+};
+const ROLES = { bricklayer: "Bricklayer", foreman: "Foreman", qs: "QS", accounts: "Accounts" };
+const STORE_KEY = "eg-brickwork-payments-v1";
+
+/* ---------- helpers ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const n = v => { const x = parseFloat(v); return isFinite(x) ? x : 0; };
+const fq = v => { v = Math.round(n(v) * 100) / 100; return v.toLocaleString("en-GB", { maximumFractionDigits: 2 }); };
+const money = v => "£" + n(v).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const pad = x => String(x).padStart(2, "0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const fdate = iso => { if (!iso) return ""; const d = new Date(iso); return isNaN(d) ? esc(iso) : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }); };
+const fdt = iso => { const d = new Date(iso); return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) + " " + d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }); };
+const clone = o => JSON.parse(JSON.stringify(o));
+
+/* ---------- state ---------- */
+let storageOk = true;
+function demoClaims() {
+  const ago = h => new Date(Date.now() - h * 3600e3).toISOString();
+  const ph = SEED.demoPhotos;
+  const yes = keys => Object.fromEntries(keys.map(([k]) => [k, "yes"]));
+  return [
+    {
+      id: "BP-0001", demo: true, site: SEED.site.code, bricklayer: "John Dolan", createdAt: ago(20), status: "submitted",
+      plots: [{ no: 7, qty: { t300: 151, commons: 120, facings: 904, lintels: 22, pipes: 4, vents: 14 }, courses: { t300: 2, commons: 3, facings: 6 }, reasons: {}, photos: [ph[0], ph[1]] }],
+      checks: yes(BRICK_CHECKS), checkNote: "", split: [{ name: "John Dolan", pct: 50 }, { name: "Matthew Rankin", pct: 50 }],
+      note: "", signedName: "John Dolan", history: [{ at: ago(20), by: "John Dolan", action: "Submitted" }],
+    },
+    {
+      id: "BP-0002", demo: true, site: SEED.site.code, bricklayer: "Jason Webb", createdAt: ago(52), status: "foreman_approved",
+      plots: [{ no: 8, qty: { t300: 151, commons: 140, facings: 904, lintels: 22, pipes: 4, vents: 14 }, courses: { t300: 2, commons: 3, facings: 6 },
+        reasons: { commons: "Extra course of commons under the vents on the rear elevation. Agreed with the foreman on site." }, photos: [ph[2]] }],
+      checks: yes(BRICK_CHECKS), checkNote: "", split: [], note: "", signedName: "Jason Webb",
+      foreman: { name: "Site Foreman", at: ago(30), checks: yes(FOREMAN_CHECKS), comment: "Checked on site. The extra course of commons is genuine." },
+      history: [{ at: ago(52), by: "Jason Webb", action: "Submitted" }, { at: ago(30), by: "Site Foreman", action: "Foreman approved", note: "Checked on site. The extra course of commons is genuine." }],
+    },
+  ];
+}
+function fresh() {
+  return {
+    seq: 2, user: { role: "bricklayer", name: "John Dolan" },
+    staffNames: { foreman: "Site Foreman", qs: "QS", accounts: "Accounts" },
+    rates: clone(SEED.rates), allowanceOverrides: {}, claims: demoClaims(), draft: null,
+  };
+}
+function load() {
+  try { const s = JSON.parse(localStorage.getItem(STORE_KEY)); if (s && Array.isArray(s.claims)) return s; } catch (e) { /* fall through */ }
+  return fresh();
+}
+let S = load();
+function save() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); storageOk = true; }
+  catch (e) { storageOk = false; toast("This device's storage is full. Changes will be lost when you close the page."); }
+}
+
+/* ---------- domain ---------- */
+const bricklayers = () => Object.keys(S.rates).filter(k => k !== "STANDARD").sort((a, b) => a.localeCompare(b));
+const rateFor = (who, item) => n((S.rates[who] || S.rates.STANDARD || {})[item]);
+const allowanceOf = no => ({ ...PLOT[no].allowance, ...(S.allowanceOverrides[no] || {}) });
+const live = c => ["submitted", "foreman_approved"].includes(c.status);
+function qtyOf(c, no) {
+  const p = c.plots.find(x => x.no == no); if (!p) return null;
+  return (c.qs && c.qs.qty && c.qs.qty[no]) || p.qty;
+}
+function usage(no, excludeId) {
+  const approved = {}, pending = {};
+  const add = (o, q) => Object.entries(q || {}).forEach(([k, v]) => o[k] = (o[k] || 0) + n(v));
+  add(approved, PLOT[no].opening);
+  for (const c of S.claims) {
+    if (c.id === excludeId) continue;
+    const q = qtyOf(c, no); if (!q) continue;
+    if (c.status === "approved") add(approved, q); else if (live(c)) add(pending, q);
+  }
+  return { approved, pending };
+}
+const poolSum = (q, pool) => POOL[pool].items.reduce((a, i) => a + n((q || {})[i]), 0);
+function checkPlot(no, excludeId, mine = {}) {
+  const a = allowanceOf(no), u = usage(no, excludeId);
+  const pools = POOLS.map(p => {
+    const allow = n(a[p.key]), appr = poolSum(u.approved, p.key), pend = poolSum(u.pending, p.key), me = poolSum(mine, p.key);
+    const left = allow - appr - pend - me;
+    const state = me <= 0 ? "none" : allow <= 0 ? "noallow" : left < 0 ? "over" : "ok";
+    return { ...p, allow, appr, pend, me, left, state };
+  });
+  const extras = NO_POOL_ITEMS.filter(k => n(mine[k]) > 0).map(k => ({ key: k, label: ITEM[k].label, me: n(mine[k]), appr: n(u.approved[k]), pend: n(u.pending[k]) }));
+  return { pools, extras, usage: u };
+}
+function claimFlags(c) {
+  const over = [], noallow = [];
+  c.plots.forEach(p => {
+    const r = checkPlot(p.no, c.id, qtyOf(c, p.no));
+    r.pools.forEach(x => { if (x.state === "over") over.push({ plot: p.no, pool: x.key, by: -x.left }); if (x.state === "noallow") noallow.push({ plot: p.no, pool: x.key }); });
+  });
+  return { over, noallow };
+}
+function claimValue(c) {
+  let total = 0;
+  c.plots.forEach(p => Object.entries(qtyOf(c, p.no)).forEach(([k, v]) => total += n(v) * rateFor(c.bricklayer, k)));
+  return Math.round(total * 100) / 100;
+}
+function payees(c) {
+  const v = claimValue(c);
+  if (!c.split || !c.split.length) return [{ name: c.bricklayer, pct: 100, amount: v }];
+  return c.split.map(s => ({ name: s.name, pct: n(s.pct), amount: Math.round(v * n(s.pct)) / 100 }));
+}
+// Thursday 10:00 cut-off: approved before it -> paid in that Thursday's run, otherwise the next one.
+function payRun(iso) {
+  const d = new Date(iso), thu = new Date(d);
+  thu.setDate(d.getDate() + ((4 - d.getDay() + 7) % 7)); thu.setHours(10, 0, 0, 0);
+  if (d > thu) thu.setDate(thu.getDate() + 7);
+  return ymd(thu);
+}
+const nextId = () => "BP-" + String(++S.seq).padStart(4, "0");
+const plotsLabel = c => c.plots.map(p => p.no).join(", ");
+const me = () => S.user.role === "bricklayer" ? S.user.name : S.staffNames[S.user.role];
+
+/* ---------- shell ---------- */
+function renderShell() {
+  $("#siteName").textContent = `${SEED.site.code} ${SEED.site.name}`;
+  const r = S.user.role;
+  $("#who").innerHTML = `<span class="hide-sm">Viewing as</span>
+    <select id="roleSel" aria-label="Role">${Object.entries(ROLES).map(([k, v]) => `<option value="${k}" ${k === r ? "selected" : ""}>${v}</option>`).join("")}</select>
+    ${r === "bricklayer" ? `<select id="nameSel" aria-label="Bricklayer">${bricklayers().map(b => `<option ${b === S.user.name ? "selected" : ""}>${esc(b)}</option>`).join("")}</select>` : ""}`;
+  const tabs = {
+    bricklayer: [["#/", "My claims"], ["#/new", "New claim"]],
+    foreman: [["#/", "Sign-off"], ["#/ledger", "Plot ledger"]],
+    qs: [["#/", "Approvals"], ["#/ledger", "Plot ledger"], ["#/payments", "Payment run"], ["#/settings", "Rates & setup"]],
+    accounts: [["#/payments", "Payment run"]],
+  }[r];
+  const h = location.hash || "#/";
+  $("#tabs").innerHTML = tabs.map(([href, t]) => `<a href="${href}" class="${(h === href || (href !== "#/" && h.startsWith(href))) ? "on" : ""}">${t}</a>`).join("");
+}
+document.addEventListener("change", e => {
+  if (e.target.id === "roleSel") { S.user.role = e.target.value; save(); location.hash = S.user.role === "accounts" ? "#/payments" : "#/"; route(); }
+  if (e.target.id === "nameSel") { S.user.name = e.target.value; save(); route(); }
+});
+
+function toast(msg) {
+  const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3200);
+}
+function zoom(src) {
+  $("#layer").innerHTML = `<div class="modal" role="dialog" aria-label="Photo"><img src="${src}" alt="Site photo"></div>`;
+  $(".modal").onclick = () => $("#layer").innerHTML = "";
+}
+document.addEventListener("click", e => { const img = e.target.closest("[data-zoom]"); if (img) zoom(img.getAttribute("src")); });
+
+/* ---------- router ---------- */
+function route() {
+  const h = location.hash || "#/";
+  const [, rawView, arg] = h.split("/");
+  const view = (rawView || "").split("?")[0];
+  renderShell();
+  const app = $("#app");
+  const r = S.user.role;
+  window.scrollTo(0, 0);
+  if (view === "new") return viewForm(app, null);
+  if (view === "edit") return viewForm(app, arg);
+  if (view === "claim") return viewClaim(app, arg);
+  if (view === "ledger") return viewLedger(app);
+  if (view === "plot") return viewPlot(app, +arg);
+  if (view === "payments") return viewPayments(app, arg);
+  if (view === "settings") return viewSettings(app);
+  if (r === "accounts") return viewPayments(app);
+  return viewHome(app);
+}
+window.addEventListener("hashchange", route);
+
+/* ---------- home ---------- */
+function claimRow(c) {
+  const [label, cls] = STATUS[c.status];
+  const f = claimFlags(c);
+  return `<a class="item" href="#/claim/${c.id}">
+    <div class="main"><b>${esc(c.id)} · Plot${c.plots.length > 1 ? "s" : ""} ${esc(plotsLabel(c))}</b>
+      <span class="muted small">${esc(c.bricklayer)} · ${fdate(c.createdAt)}${c.split && c.split.length ? " · split " + c.split.length + " ways" : ""}</span>
+      <div class="row" style="margin-top:5px;gap:5px"><span class="chip ${cls}">${label}</span>
+        ${f.over.length ? `<span class="chip bad">Over allowance (${f.over.length})</span>` : ""}
+        ${f.noallow.length ? `<span class="chip warn">No allowance set (${f.noallow.length})</span>` : ""}
+        ${c.demo ? `<span class="chip">Demo</span>` : ""}</div></div>
+    <div class="side"><b class="num">${money(claimValue(c))}</b></div></a>`;
+}
+const listOf = (arr, empty) => arr.length ? `<div class="list">${arr.map(claimRow).join("")}</div>` : `<div class="empty">${empty}</div>`;
+const byNew = (a, b) => (b.createdAt > a.createdAt ? 1 : -1);
+
+function viewHome(app) {
+  const r = S.user.role;
+  if (r === "bricklayer") {
+    const mine = S.claims.filter(c => c.bricklayer === S.user.name).sort(byNew);
+    const rej = mine.filter(c => c.status === "rejected");
+    app.innerHTML = `
+      <h1>Hi ${esc(S.user.name.split(" ")[0])}</h1>
+      <p class="muted">Book in completed work and see where every claim is up to.</p>
+      <a class="btn primary big" href="#/new">+ New claim</a>
+      ${rej.length ? `<div class="alert bad" style="margin-top:14px"><b>${rej.length} claim${rej.length > 1 ? "s" : ""} sent back to you.</b> Open ${rej.length > 1 ? "them" : "it"} to see why, fix and resubmit.</div>` : ""}
+      <h2 style="margin-top:22px">Your claims</h2>
+      ${listOf(mine, "No claims yet. Tap <b>New claim</b> when a plot is ready to book in.")}`;
+  } else if (r === "foreman") {
+    const wait = S.claims.filter(c => c.status === "submitted").sort(byNew);
+    const done = S.claims.filter(c => c.foreman && c.status !== "submitted").sort(byNew).slice(0, 10);
+    app.innerHTML = `<h1>Foreman sign-off</h1><p class="muted">Check the work on site against the photos, complete the checklist, then approve or send back.</p>
+      <h2 style="margin-top:18px">Waiting for you (${wait.length})</h2>${listOf(wait, "Nothing waiting. You're up to date.")}
+      <h2 style="margin-top:22px">Recently signed off</h2>${listOf(done, "None yet.")}`;
+  } else {
+    const wait = S.claims.filter(c => c.status === "foreman_approved").sort(byNew);
+    const site = S.claims.filter(c => c.status === "submitted").sort(byNew);
+    const appr = S.claims.filter(c => c.status === "approved");
+    const run = payRun(new Date().toISOString());
+    const runTotal = appr.filter(c => payRun(c.qs.at) === run).reduce((a, c) => a + claimValue(c), 0);
+    const overPlots = SEED.plots.filter(p => plotState(p.no).over).length;
+    app.innerHTML = `<h1>QS approvals</h1><p class="muted">Claims reach you once the foreman has signed them off. Approving posts the quantities to the plot ledger and adds the claim to the next payment run.</p>
+      <div class="stats">
+        <div class="stat"><b>${wait.length}</b><span>Waiting for you</span></div>
+        <div class="stat"><b>${site.length}</b><span>With the foreman</span></div>
+        <div class="stat"><b>${money(runTotal)}</b><span>Payment run ${fdate(run)}</span></div>
+        <div class="stat bad"><b>${overPlots}</b><span><a href="#/ledger?over">Plots over allowance</a></span></div>
+      </div>
+      <h2>Waiting for QS approval (${wait.length})</h2>${listOf(wait, "Nothing waiting for you.")}
+      <h2 style="margin-top:22px">With the foreman (${site.length})</h2>${listOf(site, "Nothing with the foreman.")}
+      <h2 style="margin-top:22px">Recently approved</h2>${listOf(appr.sort(byNew).slice(0, 8), "None yet.")}`;
+  }
+}
+
+/* ---------- claim form ---------- */
+let draft = null;
+function blankDraft() {
+  return { editing: null, plots: [], checks: {}, checkNote: "", split: [], useSplit: false, note: "", signedName: S.user.name };
+}
+function viewForm(app, editId) {
+  if (S.user.role !== "bricklayer") { app.innerHTML = `<div class="empty">Switch to a bricklayer to make a claim.</div>`; return; }
+  if (editId) {
+    const c = S.claims.find(x => x.id === editId);
+    if (!c || c.status !== "rejected") { location.hash = "#/"; return; }
+    draft = { editing: c.id, plots: clone(c.plots), checks: clone(c.checks), checkNote: c.checkNote || "", split: clone(c.split || []), useSplit: !!(c.split && c.split.length), note: c.note || "", signedName: c.signedName || S.user.name };
+  } else {
+    draft = (S.draft && !S.draft.editing && S.draft.owner === S.user.name) ? S.draft : blankDraft();
+  }
+  draft.owner = S.user.name;
+  const plotOpts = SEED.plots.map(p => `<option value="${p.no}">${esc(p.type)}</option>`).join("");
+  app.innerHTML = `
+    <a href="#/" class="small noprint">&larr; Back</a>
+    <h1 style="margin-top:6px">${draft.editing ? "Fix and resubmit " + esc(draft.editing) : "New claim"}</h1>
+    <p class="muted">${esc(SEED.site.code)} ${esc(SEED.site.name)} · ${esc(S.user.name)}</p>
+    ${draft.editing ? rejectedBanner(S.claims.find(x => x.id === draft.editing)) : ""}
+    <section class="card">
+      <div class="step"><span class="n">1</span><h2 style="margin:0">Which plots?</h2></div>
+      <p class="muted small" style="margin-top:0">Add every plot on this claim. Each plot gets its own quantities, so you don't need to split anything afterwards.</p>
+      <div class="row" style="flex-wrap:nowrap">
+        <input type="text" id="plotIn" inputmode="numeric" list="plotList" placeholder="Plot number, e.g. 52 or 52, 53" aria-label="Plot number">
+        <datalist id="plotList">${plotOpts}</datalist>
+        <button class="btn primary" id="plotAdd" type="button">Add</button>
+      </div>
+      <div id="plotErr"></div>
+    </section>
+    <div id="plotCards"></div>
+    <section class="card">
+      <div class="step"><span class="n">3</span><h2 style="margin:0">Your checks before starting</h2></div>
+      ${BRICK_CHECKS.map(([k, t]) => ynRow("chk", k, t, draft.checks[k])).join("")}
+      <div id="chkNoteWrap"></div>
+    </section>
+    <section class="card">
+      <div class="step"><span class="n">4</span><h2 style="margin:0">Split the payment?</h2></div>
+      <label class="row" style="gap:8px"><input type="checkbox" id="useSplit" ${draft.useSplit ? "checked" : ""}> Split this claim between more than one person</label>
+      <div id="splitWrap"></div>
+    </section>
+    <section class="card">
+      <div class="step"><span class="n">5</span><h2 style="margin:0">Check and send</h2></div>
+      <label class="lbl" for="note">Anything the foreman or QS should know? (optional)</label>
+      <textarea id="note" placeholder="e.g. vents moved to suit the drainage">${esc(draft.note)}</textarea>
+      <label class="lbl" for="signed">Type your name to sign</label>
+      <input type="text" id="signed" value="${esc(draft.signedName)}" autocomplete="name">
+      <div id="errors"></div>
+      <div class="sticky-total"><div class="spread"><div><span class="muted small">Claim value at your rates</span><div id="total" style="font-size:1.3rem;font-weight:800"></div></div>
+        <button class="btn primary" id="submit" type="button">${draft.editing ? "Resubmit to foreman" : "Send to foreman"}</button></div></div>
+    </section>`;
+  renderPlotCards(); renderChkNote(); renderSplit(); updateTotal();
+
+  const addPlots = () => {
+    const raw = $("#plotIn").value; const nums = (raw.match(/\d+/g) || []).map(Number);
+    const bad = nums.filter(x => !PLOT[x]); const dup = nums.filter(x => draft.plots.some(p => p.no === x));
+    nums.filter(x => PLOT[x] && !draft.plots.some(p => p.no === x)).forEach(no => draft.plots.push({ no, qty: {}, courses: {}, reasons: {}, photos: [] }));
+    $("#plotErr").innerHTML = bad.length ? `<div class="alert bad">Plot ${bad.join(", ")} isn't on the ${esc(SEED.site.code)} plot list.</div>` : dup.length ? `<div class="alert warn">Plot ${dup.join(", ")} is already on this claim.</div>` : "";
+    $("#plotIn").value = ""; renderPlotCards(); updateTotal(); keepDraft();
+  };
+  $("#plotAdd").onclick = addPlots;
+  $("#plotIn").onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); addPlots(); } };
+  app.oninput = onFormInput; app.onchange = onFormChange; app.onclick = onFormClick;
+}
+function rejectedBanner(c) {
+  const h = [...c.history].reverse().find(x => /Sent back/.test(x.action));
+  return `<div class="alert bad"><b>Sent back by ${esc(h ? h.by : "")}:</b> ${esc(h ? h.note : "")}</div>`;
+}
+function ynRow(group, key, text, val) {
+  return `<div class="check-row"><span>${esc(text)}</span><div class="yn" role="radiogroup" aria-label="${esc(text)}">
+    <label><input type="radio" name="${group}-${key}" value="yes" data-g="${group}" data-k="${key}" ${val === "yes" ? "checked" : ""}><span>Yes</span></label>
+    <label><input type="radio" name="${group}-${key}" value="no" data-g="${group}" data-k="${key}" ${val === "no" ? "checked" : ""}><span>No</span></label></div></div>`;
+}
+function renderPlotCards() {
+  const wrap = $("#plotCards");
+  if (!draft.plots.length) { wrap.innerHTML = `<section class="card"><div class="step"><span class="n">2</span><h2 style="margin:0">Quantities and photos</h2></div><div class="empty">Add a plot above to see its allowance and enter quantities.</div></section>`; return; }
+  wrap.innerHTML = draft.plots.map((p, i) => {
+    const P = PLOT[p.no];
+    return `<section class="card" data-plot="${p.no}">
+      <div class="spread"><div class="step" style="margin:0"><span class="n">2</span><h2 style="margin:0">Plot ${p.no} <span class="muted" style="font-weight:500">· ${esc(P.type)} · ${esc(P.foundation)}</span></h2></div>
+        <button class="btn sm danger" data-act="rmplot" data-i="${i}" type="button">Remove</button></div>
+      <div id="calc-${p.no}" style="margin-top:12px"></div>
+      <h3 style="margin-top:14px">What have you completed on plot ${p.no}?</h3>
+      <div class="qty-grid">${ITEMS.map(it => `<div class="qty ${n(p.qty[it.key]) ? "has" : ""}" data-qwrap="${it.key}">
+          <label for="q-${p.no}-${it.key}">${esc(it.label)}</label>
+          <div class="pair"><input type="number" min="0" step="any" inputmode="decimal" id="q-${p.no}-${it.key}" data-q="${it.key}" data-no="${p.no}" value="${p.qty[it.key] ?? ""}" placeholder="0">
+          ${COURSE_ITEMS.includes(it.key) ? `<input class="c" type="number" min="0" step="1" inputmode="numeric" data-c="${it.key}" data-no="${p.no}" value="${p.courses[it.key] ?? ""}" placeholder="crs" aria-label="${esc(it.label)} courses">` : ""}</div>
+          <small>${esc(it.unit)} · ${money(rateFor(S.user.name, it.key))} each</small></div>`).join("")}</div>
+      <div id="reasons-${p.no}"></div>
+      <h3 style="margin-top:16px">Photos of the completed work <span class="muted small" style="font-weight:500">(at least one required)</span></h3>
+      <div class="photos" id="photos-${p.no}"></div>
+    </section>`;
+  }).join("");
+  draft.plots.forEach(p => { renderCalc(p.no); renderReasons(p.no); renderPhotos(p.no); });
+}
+function calcTable(no, r, showMine = true, mineLabel = "Now") {
+  const rows = r.pools.filter(x => x.allow > 0 || x.appr > 0 || x.pend > 0 || x.me > 0);
+  const extra = r.extras || [];
+  return `<div class="tablewrap"><table>
+    <thead><tr><th>Item</th><th class="num">Allow</th><th class="num">Booked</th>${showMine ? `<th class="num">${mineLabel}</th>` : ""}<th class="num">Left</th></tr></thead>
+    <tbody>${rows.map(x => {
+      const cls = x.state === "over" ? "over" : x.state === "noallow" ? "noallow" : "";
+      return `<tr><td>${esc(x.label)}${x.state === "noallow" ? `<div class="small" style="color:var(--warn);font-weight:600">No allowance</div>` : ""}</td>
+        <td class="num">${x.allow ? fq(x.allow) : "–"}</td><td class="num">${fq(x.appr)}${pendNote(x.pend)}</td>
+        ${showMine ? `<td class="num"><b>${x.me ? fq(x.me) : "–"}</b></td>` : ""}<td class="num ${cls}">${x.allow ? fq(x.left) : "–"}${x.state === "over" ? `<div class="small">over</div>` : ""}</td></tr>`;
+    }).join("")}
+    ${extra.map(x => `<tr><td>${esc(x.label)}<div class="small muted">Not in tender</div></td><td class="num">–</td><td class="num">${fq(x.appr)}${pendNote(x.pend)}</td>${showMine ? `<td class="num"><b>${fq(x.me)}</b></td>` : ""}<td class="num">–</td></tr>`).join("")}
+    </tbody></table></div>`;
+}
+const pendNote = v => v ? `<div class="small" style="color:var(--warn);font-weight:600">+${fq(v)} pending</div>` : "";
+function renderCalc(no) {
+  const p = draft.plots.find(x => x.no === no); if (!p) return;
+  const r = checkPlot(no, draft.editing, p.qty);
+  const P = PLOT[no];
+  $(`#calc-${no}`).innerHTML = calcTable(no, r) +
+    `<p class="muted small" style="margin:6px 0 0">Booked is everything already approved on this plot, from the old Excel ledger and every bricklayer. Pending claims from others also count against what is left.${P.extraCourse ? ` One extra course of trench block on this plot is ${fq(P.extraCourse)} blocks.` : ""}</p>`;
+}
+function overPools(no) {
+  const p = draft.plots.find(x => x.no === no);
+  return checkPlot(no, draft.editing, p.qty).pools.filter(x => x.state === "over");
+}
+function renderReasons(no) {
+  const p = draft.plots.find(x => x.no === no); const over = overPools(no);
+  const el = $(`#reasons-${no}`);
+  const key = over.map(x => x.key).join(",");
+  if (el.dataset.key === key) return;
+  el.dataset.key = key;
+  el.innerHTML = over.map(x => `<div class="alert bad" style="margin-top:12px"><b>${esc(x.label)} is over the allowance for plot ${no}.</b> You can still send it, but tell the foreman and QS why.
+      <textarea style="margin-top:8px" data-reason="${x.key}" data-no="${no}" placeholder="e.g. foundation stepped down, 1 extra course needed">${esc(p.reasons[x.key] || "")}</textarea></div>`).join("");
+}
+function renderPhotos(no) {
+  const p = draft.plots.find(x => x.no === no);
+  $(`#photos-${no}`).innerHTML = p.photos.map((src, i) => `<div class="photo"><img src="${src}" alt="Plot ${no} photo ${i + 1}" data-zoom><button type="button" data-act="rmphoto" data-no="${no}" data-i="${i}" aria-label="Remove photo">×</button></div>`).join("") +
+    `<label class="addphoto">+ Add photo<input type="file" accept="image/*" multiple data-photo="${no}" hidden></label>`;
+}
+function renderChkNote() {
+  const anyNo = BRICK_CHECKS.some(([k]) => draft.checks[k] === "no");
+  const w = $("#chkNoteWrap");
+  if (!anyNo) { w.innerHTML = ""; return; }
+  if (!$("#chkNote")) w.innerHTML = `<label class="lbl" for="chkNote">You answered No. What's the problem?</label><textarea id="chkNote">${esc(draft.checkNote)}</textarea>`;
+}
+function renderSplit() {
+  const w = $("#splitWrap");
+  if (!draft.useSplit) { w.innerHTML = ""; return; }
+  if (!draft.split.length) draft.split = [{ name: S.user.name, pct: 50 }, { name: "", pct: 50 }];
+  const sum = draft.split.reduce((a, s) => a + n(s.pct), 0);
+  w.innerHTML = `<div style="margin-top:10px">${draft.split.map((s, i) => `<div class="row" style="flex-wrap:nowrap;margin-bottom:6px">
+      <input type="text" data-sn="${i}" value="${esc(s.name)}" placeholder="Name" aria-label="Name ${i + 1}">
+      <input type="number" data-sp="${i}" value="${s.pct}" min="0" max="100" style="width:80px" aria-label="Percent ${i + 1}"><span>%</span>
+      ${draft.split.length > 2 ? `<button class="btn sm" type="button" data-act="rmsplit" data-i="${i}" aria-label="Remove">×</button>` : ""}</div>`).join("")}
+    <div class="spread"><button class="btn sm" type="button" data-act="addsplit">+ Add person</button>
+    <span id="splitSum" class="${Math.abs(sum - 100) > .01 ? "t-over" : "muted"} small">Total ${fq(sum)}%</span></div></div>`;
+}
+function updateTotal() {
+  let v = 0; draft.plots.forEach(p => Object.entries(p.qty).forEach(([k, q]) => v += n(q) * rateFor(S.user.name, k)));
+  const t = $("#total"); if (t) t.textContent = money(v);
+}
+function keepDraft() { if (!draft.editing) { S.draft = draft; save(); } }
+function onFormInput(e) {
+  const t = e.target, no = +t.dataset.no;
+  if (t.dataset.q) {
+    const p = draft.plots.find(x => x.no === no); const v = t.value;
+    if (v === "" || n(v) === 0) delete p.qty[t.dataset.q]; else p.qty[t.dataset.q] = n(v);
+    t.closest(".qty").classList.toggle("has", n(v) > 0);
+    renderCalc(no); renderReasons(no); updateTotal();
+  } else if (t.dataset.c) {
+    const p = draft.plots.find(x => x.no === no); if (t.value === "") delete p.courses[t.dataset.c]; else p.courses[t.dataset.c] = n(t.value);
+  } else if (t.dataset.reason) {
+    draft.plots.find(x => x.no === no).reasons[t.dataset.reason] = t.value;
+  } else if (t.dataset.sn !== undefined) { draft.split[+t.dataset.sn].name = t.value; }
+  else if (t.dataset.sp !== undefined) {
+    draft.split[+t.dataset.sp].pct = n(t.value);
+    const sum = draft.split.reduce((a, s) => a + n(s.pct), 0); const el = $("#splitSum");
+    el.textContent = `Total ${fq(sum)}%`; el.className = (Math.abs(sum - 100) > .01 ? "t-over" : "muted") + " small";
+  }
+  else if (t.id === "chkNote") draft.checkNote = t.value;
+  else if (t.id === "note") draft.note = t.value;
+  else if (t.id === "signed") draft.signedName = t.value;
+  keepDraft();
+}
+async function onFormChange(e) {
+  const t = e.target;
+  if (t.dataset.g === "chk") { draft.checks[t.dataset.k] = t.value; renderChkNote(); keepDraft(); }
+  if (t.id === "useSplit") { draft.useSplit = t.checked; if (!t.checked) draft.split = []; renderSplit(); keepDraft(); }
+  if (t.dataset.photo) {
+    const no = +t.dataset.photo, p = draft.plots.find(x => x.no === no);
+    for (const f of t.files) { try { p.photos.push(await compress(f)); } catch (err) { toast("Couldn't read that photo."); } }
+    renderPhotos(no); keepDraft();
+  }
+}
+function onFormClick(e) {
+  const b = e.target.closest("[data-act]"); if (!b) { if (e.target.id === "submit") submitDraft(); return; }
+  const a = b.dataset.act;
+  if (a === "rmplot") { draft.plots.splice(+b.dataset.i, 1); renderPlotCards(); updateTotal(); }
+  if (a === "rmphoto") { const no = +b.dataset.no; draft.plots.find(x => x.no === no).photos.splice(+b.dataset.i, 1); renderPhotos(no); }
+  if (a === "addsplit") { draft.split.push({ name: "", pct: 0 }); renderSplit(); }
+  if (a === "rmsplit") { draft.split.splice(+b.dataset.i, 1); renderSplit(); }
+  keepDraft();
+}
+function compress(file) {
+  return new Promise((res, rej) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const s = Math.min(1, 1100 / Math.max(img.width, img.height));
+      const cv = document.createElement("canvas"); cv.width = Math.round(img.width * s); cv.height = Math.round(img.height * s);
+      cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height); URL.revokeObjectURL(url);
+      res(cv.toDataURL("image/jpeg", 0.6));
+    };
+    img.onerror = rej; img.src = url;
+  });
+}
+function submitDraft() {
+  const errs = [];
+  if (!draft.plots.length) errs.push("Add at least one plot.");
+  draft.plots.forEach(p => {
+    if (!Object.values(p.qty).some(v => n(v) > 0)) errs.push(`Plot ${p.no}: enter at least one quantity.`);
+    if (!p.photos.length) errs.push(`Plot ${p.no}: add at least one photo of the completed work. No photos, no payment.`);
+    overPools(p.no).forEach(x => { if (!(p.reasons[x.key] || "").trim()) errs.push(`Plot ${p.no}: say why ${x.label.toLowerCase()} is over the allowance.`); });
+  });
+  BRICK_CHECKS.forEach(([k, t]) => { if (!draft.checks[k]) errs.push(`Answer the check: "${t}".`); });
+  if (BRICK_CHECKS.some(([k]) => draft.checks[k] === "no") && !draft.checkNote.trim()) errs.push("Explain the check you answered No to.");
+  if (draft.useSplit) {
+    const sum = draft.split.reduce((a, s) => a + n(s.pct), 0);
+    if (Math.abs(sum - 100) > .01) errs.push(`The split adds up to ${fq(sum)}%. It needs to be 100%.`);
+    if (draft.split.some(s => !s.name.trim())) errs.push("Give a name for everyone in the split.");
+  }
+  if (!draft.signedName.trim()) errs.push("Type your name to sign the claim.");
+  $("#errors").innerHTML = errs.length ? `<div class="alert bad"><b>Before you can send this:</b><ul>${errs.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : "";
+  if (errs.length) { $("#errors").scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+  const plots = draft.plots.map(p => ({ no: p.no, qty: p.qty, courses: p.courses, photos: p.photos, reasons: Object.fromEntries(overPools(p.no).map(x => [x.key, p.reasons[x.key]])) }));
+  const now = new Date().toISOString();
+  let c;
+  if (draft.editing) {
+    c = S.claims.find(x => x.id === draft.editing);
+    Object.assign(c, { plots, checks: draft.checks, checkNote: draft.checkNote, split: draft.useSplit ? draft.split : [], note: draft.note, signedName: draft.signedName, status: "submitted", foreman: null, qs: null });
+    c.history.push({ at: now, by: S.user.name, action: "Resubmitted" });
+  } else {
+    c = { id: nextId(), site: SEED.site.code, bricklayer: S.user.name, createdAt: now, status: "submitted", plots, checks: draft.checks, checkNote: draft.checkNote,
+      split: draft.useSplit ? draft.split : [], note: draft.note, signedName: draft.signedName, history: [{ at: now, by: S.user.name, action: "Submitted" }] };
+    S.claims.push(c); S.draft = null;
+  }
+  save(); draft = null;
+  toast(`${c.id} sent to the foreman`); location.hash = "#/claim/" + c.id;
+}
+
+/* ---------- claim detail ---------- */
+function viewClaim(app, id) {
+  const c = S.claims.find(x => x.id === id);
+  if (!c) { app.innerHTML = `<div class="empty">Claim not found. <a href="#/">Back</a></div>`; return; }
+  const r = S.user.role, [label, cls] = STATUS[c.status];
+  const qsEdit = r === "qs" && c.status === "foreman_approved";
+  const f = claimFlags(c);
+  const lastRej = c.status === "rejected" ? rejectedBanner(c) : "";
+  app.innerHTML = `
+    <a href="#/" class="small noprint">&larr; Back</a>
+    <div class="spread" style="margin-top:6px"><h1>${esc(c.id)} · Plot${c.plots.length > 1 ? "s" : ""} ${esc(plotsLabel(c))}</h1><span class="chip ${cls}" style="font-size:.85rem">${label}</span></div>
+    <div class="card tight"><dl class="kv">
+      <dt>Bricklayer</dt><dd>${esc(c.bricklayer)}${c.demo ? ` <span class="chip">Demo</span>` : ""}</dd>
+      <dt>Site</dt><dd>${esc(SEED.site.code)} ${esc(SEED.site.name)}</dd>
+      <dt>Submitted</dt><dd>${fdt(c.createdAt)}</dd>
+      <dt>Value</dt><dd id="cv">${money(claimValue(c))}</dd>
+      ${c.status === "approved" ? `<dt>Payment run</dt><dd><a href="#/payments/${payRun(c.qs.at)}">Thursday ${fdate(payRun(c.qs.at))}</a></dd>` : ""}
+    </dl>${c.note ? `<p style="margin:10px 0 0"><b>Note from ${esc(c.bricklayer)}:</b> ${esc(c.note)}</p>` : ""}</div>
+    ${lastRej}
+    ${f.over.length && c.status !== "approved" ? `<div class="alert bad"><b>Over allowance:</b> ${f.over.map(o => `plot ${o.plot} ${POOL[o.pool].label.toLowerCase()} by ${fq(o.by)}`).join("; ")}. The bricklayer's reasons are shown under each plot.</div>` : ""}
+    ${c.plots.map(p => claimPlotCard(c, p, qsEdit)).join("")}
+    <div class="grid2">
+      <section class="card"><h2>Bricklayer checks</h2>${checkList(BRICK_CHECKS, c.checks)}${c.checkNote ? `<p class="small"><b>Note:</b> ${esc(c.checkNote)}</p>` : ""}<p class="muted small" style="margin-bottom:0">Signed: ${esc(c.signedName)}</p></section>
+      <section class="card"><h2>Foreman checks</h2>${c.foreman ? checkList(FOREMAN_CHECKS, c.foreman.checks) + (c.foreman.comment ? `<p class="small"><b>${esc(c.foreman.name)}:</b> ${esc(c.foreman.comment)}</p>` : "") : `<p class="muted">Not signed off yet.</p>`}</section>
+    </div>
+    <section class="card"><h2>Payment</h2>${payTable(c)}</section>
+    <div id="actions"></div>
+    <section class="card"><h2>History</h2><ul class="timeline">${c.history.map(h => `<li><b>${esc(h.action)}</b> by ${esc(h.by)} <span class="muted">· ${fdt(h.at)}</span>${h.note ? `<div class="small">${esc(h.note)}</div>` : ""}</li>`).join("")}</ul></section>`;
+  renderActions(c);
+  if (qsEdit) app.oninput = e => {
+    const t = e.target; if (!t.dataset.aq) return;
+    const no = +t.dataset.no; c.qs = c.qs || {}; c.qs.qty = c.qs.qty || {};
+    c.qs.qty[no] = c.qs.qty[no] || clone(c.plots.find(x => x.no === no).qty);
+    if (t.value === "") delete c.qs.qty[no][t.dataset.aq]; else c.qs.qty[no][t.dataset.aq] = n(t.value);
+    $("#cv").textContent = money(claimValue(c));
+    $(`#ccalc-${no}`).innerHTML = calcTable(no, checkPlot(no, c.id, qtyOf(c, no)));
+    $(`#pv-${no}`).textContent = money(plotValue(c, no));
+    save();
+  }; else app.oninput = null;
+  app.onchange = null; app.onclick = null;
+}
+function plotValue(c, no) { return Object.entries(qtyOf(c, no)).reduce((a, [k, v]) => a + n(v) * rateFor(c.bricklayer, k), 0); }
+function claimPlotCard(c, p, qsEdit) {
+  const P = PLOT[p.no], q = qtyOf(c, p.no);
+  const keys = ITEMS.map(i => i.key).filter(k => n(p.qty[k]) > 0 || n(q[k]) > 0);
+  return `<section class="card">
+    <div class="spread"><h2 style="margin:0">Plot ${p.no} <span class="muted" style="font-weight:500">· ${esc(P.type)} · ${esc(P.foundation)}</span></h2>
+      ${S.user.role !== "bricklayer" ? `<a class="small" href="#/plot/${p.no}">Plot ledger &rarr;</a>` : ""}</div>
+    <div class="tablewrap" style="margin-top:10px"><table>
+      <thead><tr><th>Item</th><th class="num hide-sm">Courses</th><th class="num">Claimed</th>${qsEdit || (c.qs && c.qs.qty) ? `<th class="num">Approved</th>` : ""}<th class="num hide-sm">Rate</th><th class="num">Value</th></tr></thead>
+      <tbody>${keys.map(k => `<tr><td>${esc(ITEM[k].label)}</td><td class="num hide-sm">${p.courses && p.courses[k] ? fq(p.courses[k]) : "–"}</td><td class="num">${fq(p.qty[k] || 0)}</td>
+        ${qsEdit ? `<td class="num"><input type="number" min="0" step="any" data-aq="${k}" data-no="${p.no}" value="${q[k] ?? ""}" style="width:90px;text-align:right" aria-label="Approved ${esc(ITEM[k].label)}"></td>` : (c.qs && c.qs.qty) ? `<td class="num ${n(q[k]) !== n(p.qty[k]) ? "t-over" : ""}">${fq(q[k] || 0)}</td>` : ""}
+        <td class="num hide-sm">${money(rateFor(c.bricklayer, k))}</td><td class="num">${money(n(q[k]) * rateFor(c.bricklayer, k))}</td></tr>`).join("")}</tbody></table></div>
+    <div class="spread" style="margin-top:8px;font-weight:700"><span>Plot ${p.no} total</span><span class="num" id="pv-${p.no}">${money(plotValue(c, p.no))}</span></div>
+    ${qsEdit ? `<p class="muted small">You can change the approved quantities before approving. The bricklayer will see what was changed.</p>` : ""}
+    <h3 style="margin-top:14px">Against the allowance</h3>
+    <div id="ccalc-${p.no}">${calcTable(p.no, checkPlot(p.no, c.id, q))}</div>
+    ${Object.entries(p.reasons || {}).filter(([, v]) => v).map(([k, v]) => `<div class="alert bad"><b>Reason for ${esc(POOL[k].label.toLowerCase())} over allowance:</b> ${esc(v)}</div>`).join("")}
+    <h3 style="margin-top:14px">Photos (${p.photos.length})</h3>
+    ${p.photos.length ? `<div class="photos">${p.photos.map((s, i) => `<div class="photo"><img src="${s}" alt="Plot ${p.no} photo ${i + 1}" data-zoom></div>`).join("")}</div>` : `<div class="alert bad">No photos. No payment.</div>`}
+  </section>`;
+}
+function checkList(defs, vals) {
+  return `<div>${defs.map(([k, t]) => `<div class="check-row"><span class="small">${esc(t)}</span>${vals && vals[k] === "yes" ? `<span class="chip ok">Yes</span>` : vals && vals[k] === "no" ? `<span class="chip bad">No</span>` : `<span class="chip">–</span>`}</div>`).join("")}</div>`;
+}
+function payTable(c) {
+  return `<div class="tablewrap"><table><thead><tr><th>Paid to</th><th class="num">Share</th><th class="num">Amount</th></tr></thead>
+    <tbody>${payees(c).map(p => `<tr><td>${esc(p.name)}</td><td class="num">${fq(p.pct)}%</td><td class="num">${money(p.amount)}</td></tr>`).join("")}</tbody></table></div>
+    <p class="muted small" style="margin-bottom:0">Rates are ${esc(c.bricklayer)}'s current rates from the rates sheet.</p>`;
+}
+function renderActions(c) {
+  const r = S.user.role, el = $("#actions");
+  if (r === "foreman" && c.status === "submitted") {
+    el.innerHTML = `<section class="card" style="border-color:var(--accent)"><h2>Your sign-off</h2>
+      ${FOREMAN_CHECKS.map(([k, t]) => ynRow("fm", k, t)).join("")}
+      <label class="lbl" for="fmComment">Comment (required if anything is No, or you're sending it back)</label><textarea id="fmComment"></textarea>
+      <label class="lbl" for="fmName">Your name</label><input type="text" id="fmName" value="${esc(S.staffNames.foreman)}">
+      <div id="actErr"></div>
+      <div class="row" style="margin-top:12px"><button class="btn ok" id="fmOk" type="button">Approve and send to QS</button><button class="btn danger" id="fmNo" type="button">Send back to bricklayer</button></div></section>`;
+    const collect = () => Object.fromEntries(FOREMAN_CHECKS.map(([k]) => [k, (($(`input[name=fm-${k}]:checked`) || {}).value)]));
+    $("#fmOk").onclick = () => {
+      const checks = collect(), comment = $("#fmComment").value.trim(), name = $("#fmName").value.trim();
+      const errs = [];
+      if (FOREMAN_CHECKS.some(([k]) => !checks[k])) errs.push("Answer every check.");
+      if (Object.values(checks).includes("no") && !comment) errs.push("Add a comment explaining the No answers.");
+      if (!name) errs.push("Add your name.");
+      if (errs.length) { $("#actErr").innerHTML = `<div class="alert bad">${errs.join(" ")}</div>`; return; }
+      S.staffNames.foreman = name; const now = new Date().toISOString();
+      c.foreman = { name, at: now, checks, comment }; c.status = "foreman_approved";
+      c.history.push({ at: now, by: name, action: "Foreman approved", note: comment });
+      save(); toast(`${c.id} sent to the QS`); location.hash = "#/";
+    };
+    $("#fmNo").onclick = () => reject(c, $("#fmComment").value.trim(), $("#fmName").value.trim() || "Foreman", "foreman");
+  } else if (r === "qs" && c.status === "foreman_approved") {
+    const f = claimFlags(c);
+    el.innerHTML = `<section class="card" style="border-color:var(--accent)"><h2>QS approval</h2>
+      ${f.over.length ? `<div class="alert bad">Approving will put plot ${[...new Set(f.over.map(o => o.plot))].join(", ")} over the allowance. Check the reasons above.</div>` : `<div class="alert ok">Within the allowance on every plot.</div>`}
+      ${f.noallow.length ? `<div class="alert warn">Some items have no allowance in the tender (${f.noallow.map(o => `plot ${o.plot} ${POOL[o.pool].label.toLowerCase()}`).join(", ")}). Check them against the drawings.</div>` : ""}
+      <label class="lbl" for="qsComment">Comment (required if sending back)</label><textarea id="qsComment"></textarea>
+      <label class="lbl" for="qsName">Your name</label><input type="text" id="qsName" value="${esc(S.staffNames.qs)}">
+      <div id="actErr"></div>
+      <div class="row" style="margin-top:12px"><button class="btn ok" id="qsOk" type="button">Approve and post to ledger</button><button class="btn danger" id="qsNo" type="button">Send back to bricklayer</button></div></section>`;
+    $("#qsOk").onclick = () => {
+      const name = $("#qsName").value.trim() || "QS", comment = $("#qsComment").value.trim(), now = new Date().toISOString();
+      const changed = c.qs && c.qs.qty && c.plots.some(p => c.qs.qty[p.no] && JSON.stringify(c.qs.qty[p.no]) !== JSON.stringify(p.qty));
+      S.staffNames.qs = name;
+      c.qs = { ...(c.qs || {}), name, at: now, comment }; if (!changed) delete c.qs.qty;
+      c.status = "approved";
+      c.history.push({ at: now, by: name, action: changed ? "QS approved with amended quantities" : "QS approved", note: comment });
+      save(); toast(`${c.id} approved. Payment run ${fdate(payRun(now))}`); location.hash = "#/";
+    };
+    $("#qsNo").onclick = () => { if (c.qs && $("#qsComment").value.trim()) delete c.qs.qty; reject(c, $("#qsComment").value.trim(), $("#qsName").value.trim() || "QS", "qs"); };
+  } else if (r === "bricklayer" && c.status === "rejected" && c.bricklayer === S.user.name) {
+    el.innerHTML = `<a class="btn primary big noprint" href="#/edit/${c.id}">Fix and resubmit</a><div style="height:14px"></div>`;
+  } else el.innerHTML = "";
+}
+function reject(c, reason, name, role) {
+  if (!reason) { $("#actErr").innerHTML = `<div class="alert bad">Say why you're sending it back, so the bricklayer knows what to fix.</div>`; return; }
+  S.staffNames[role] = name;
+  const now = new Date().toISOString();
+  c.status = "rejected"; c.history.push({ at: now, by: name, action: "Sent back to bricklayer", note: reason });
+  save(); toast(`${c.id} sent back to ${c.bricklayer}`); location.hash = "#/";
+}
+
+/* ---------- ledger ---------- */
+function plotState(no) {
+  const r = checkPlot(no, null, {});
+  const over = r.pools.some(x => x.allow > 0 && x.appr > x.allow);
+  const pend = r.pools.some(x => x.pend > 0) || S.claims.some(c => live(c) && c.plots.some(p => p.no === no));
+  const booked = r.pools.some(x => x.appr > 0) || Object.keys(PLOT[no].opening).length > 0;
+  return { r, over, pend, booked };
+}
+function viewLedger(app) {
+  const q = (location.hash.split("?")[1] || "");
+  const st = { search: "", filter: q === "over" ? "over" : "all" };
+  const fixes = SEED.ledgerTextFixes;
+  const all = SEED.plots.map(p => ({ p, s: plotState(p.no) }));
+  const nOver = all.filter(x => x.s.over).length, nBooked = all.filter(x => x.s.booked).length, nPend = all.filter(x => x.s.pend).length;
+  app.innerHTML = `<h1>Plot ledger</h1>
+    <p class="muted">${esc(SEED.site.code)} ${esc(SEED.site.name)} · allowances from the tender, plus everything booked in the old Excel ledger and through this app. Updates itself whenever the QS approves a claim.</p>
+    <div class="stats">
+      <div class="stat"><b>${SEED.plots.length}</b><span>Plots</span></div>
+      <div class="stat"><b>${nBooked}</b><span>With bookings</span></div>
+      <div class="stat warn"><b>${nPend}</b><span>With claims pending</span></div>
+      <div class="stat bad"><b>${nOver}</b><span>Over allowance</span></div>
+    </div>
+    <details class="card tight"><summary>${fixes.length} entries in the old Excel ledger were typed as text. Excel's totals skipped them; they're counted here.</summary>
+      <div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Plot</th><th>Item</th><th>Typed in Excel as</th><th class="num">Counted as</th></tr></thead>
+      <tbody>${fixes.map(f => `<tr><td><a href="#/plot/${f.plot}">${f.plot}</a></td><td>${esc(ITEM[f.item].label)}</td><td><code>${esc(f.text)}</code></td><td class="num">${fq(f.value)}</td></tr>`).join("")}</tbody></table></div></details>
+    <div class="row noprint" style="margin-bottom:10px">
+      <input type="search" id="lsearch" placeholder="Find plot or house type" style="flex:1;min-width:160px" aria-label="Search plots">
+      <select class="field" id="lfilter" style="width:auto" aria-label="Filter">
+        <option value="all">All plots</option><option value="over" ${st.filter === "over" ? "selected" : ""}>Over allowance</option><option value="pend">Claims pending</option><option value="booked">With bookings</option><option value="none">Nothing booked</option></select>
+      <button class="btn sm" id="lcsv" type="button">Export CSV</button>
+    </div>
+    <div class="tablewrap"><table><thead><tr><th>Plot</th><th>House type</th>${POOLS.slice(0, 3).map(p => `<th>${esc(p.label)}<div style="font-weight:500;text-transform:none;letter-spacing:0">booked / allowance</div></th>`).join("")}<th>Status</th></tr></thead><tbody id="lbody"></tbody></table></div>`;
+  const draw = () => {
+    const s = st.search.toLowerCase();
+    const rows = all.filter(({ p, s: x }) => (!s || String(p.no) === s || p.type.toLowerCase().includes(s)) &&
+      (st.filter === "all" || (st.filter === "over" && x.over) || (st.filter === "pend" && x.pend) || (st.filter === "booked" && x.booked) || (st.filter === "none" && !x.booked)));
+    $("#lbody").innerHTML = rows.map(({ p, s: x }) => `<tr class="click" data-plot="${p.no}"><td><b>${p.no}</b></td><td>${esc(p.type)}<div class="muted small">${esc(p.foundation)}</div></td>
+      ${x.r.pools.slice(0, 3).map(c => cell(c)).join("")}
+      <td>${x.over ? `<span class="chip bad">Over</span>` : ""} ${x.pend ? `<span class="chip gold">Pending</span>` : ""} ${!x.over && !x.pend && x.booked ? `<span class="chip ok">OK</span>` : ""}${!x.booked && !x.pend ? `<span class="chip">Not started</span>` : ""}</td></tr>`).join("") || `<tr><td colspan="6" class="muted">No plots match.</td></tr>`;
+  };
+  draw();
+  $("#lsearch").oninput = e => { st.search = e.target.value.trim(); draw(); };
+  $("#lfilter").onchange = e => { st.filter = e.target.value; draw(); };
+  $("#lbody").onclick = e => { const tr = e.target.closest("tr[data-plot]"); if (tr) location.hash = "#/plot/" + tr.dataset.plot; };
+  $("#lcsv").onclick = () => {
+    const head = ["Plot", "House type", "Foundation", ...POOLS.flatMap(p => [p.label + " allowance", p.label + " booked", p.label + " pending", p.label + " left"]), ...NO_POOL_ITEMS.map(k => ITEM[k].label + " booked")];
+    const lines = all.map(({ p, s: x }) => [p.no, p.type, p.foundation, ...x.r.pools.flatMap(c => [c.allow, c.appr, c.pend, c.allow - c.appr - c.pend]), ...NO_POOL_ITEMS.map(k => n(x.r.usage.approved[k]))]);
+    download(`${SEED.site.code}-plot-ledger-${ymd(new Date())}.csv`, toCsv([head, ...lines]));
+  };
+  app.oninput = null; app.onchange = null; app.onclick = null;
+}
+function cell(c) {
+  if (!c.allow && !c.appr && !c.pend) return `<td class="muted">–</td>`;
+  const over = c.allow > 0 && c.appr > c.allow;
+  const pa = c.allow ? Math.min(100, c.appr / c.allow * 100) : 100, pp = c.allow ? Math.max(0, Math.min(100 - pa, c.pend / c.allow * 100)) : 0;
+  return `<td class="${over ? "over" : !c.allow ? "noallow" : ""} num" style="text-align:left">${fq(c.appr)} / ${c.allow ? fq(c.allow) : "none"}${c.pend ? `<div class="small" style="color:var(--warn)">+${fq(c.pend)} pending</div>` : ""}
+    <div class="bar ${over ? "over" : ""}"><i style="width:${pa}%"></i><i class="p" style="width:${pp}%"></i></div></td>`;
+}
+function viewPlot(app, no) {
+  const P = PLOT[no]; if (!P) { app.innerHTML = `<div class="empty">No such plot.</div>`; return; }
+  const x = plotState(no), a = allowanceOf(no), isQS = S.user.role === "qs";
+  const claims = S.claims.filter(c => c.plots.some(p => p.no === no) && c.status !== "draft").sort(byNew);
+  const fixes = SEED.ledgerTextFixes.filter(f => f.plot === no);
+  const opening = Object.entries(P.opening);
+  app.innerHTML = `<a href="#/ledger" class="small">&larr; Plot ledger</a>
+    <div class="spread" style="margin-top:6px"><h1>Plot ${no} · ${esc(P.type)}</h1><span>${x.over ? `<span class="chip bad">Over allowance</span>` : ""} ${x.pend ? `<span class="chip gold">Claim pending</span>` : ""}</span></div>
+    <p class="muted">${esc(P.foundation)} foundation${P.extraCourse ? ` · 1 extra course of trench block = ${fq(P.extraCourse)}` : ""}</p>
+    <section class="card"><div class="spread"><h2 style="margin:0">Allowance vs booked</h2>${isQS ? `<button class="btn sm" id="editAllow" type="button">Edit allowance</button>` : ""}</div>
+      <div style="margin-top:10px">${calcTable(no, { pools: x.r.pools, extras: NO_POOL_ITEMS.filter(k => x.r.usage.approved[k] || x.r.usage.pending[k]).map(k => ({ key: k, label: ITEM[k].label, me: 0, appr: n(x.r.usage.approved[k]), pend: n(x.r.usage.pending[k]) })) }, false)}</div>
+      <div id="allowEdit"></div>
+      ${S.allowanceOverrides[no] ? `<p class="small muted">Allowance changed by the QS from the tender figures.</p>` : ""}</section>
+    <section class="card"><h2>Bookings</h2>
+      ${claims.length ? `<div class="list">${claims.map(claimRow).join("")}</div>` : ""}
+      ${opening.length ? `<div class="card tight" style="margin:10px 0 0;box-shadow:none"><b>Brought forward from the Excel ledger</b>
+        <div class="muted small">${P.openingClaims.map(h => `${esc(h.by)} ${h.date ? "(" + fdate(h.date) + ")" : ""}`).join(" · ") || "Earlier claims"}</div>
+        <div class="row small" style="margin-top:6px;gap:6px">${opening.map(([k, v]) => `<span class="chip">${esc(ITEM[k].label)}: ${fq(v)}</span>`).join("")}</div>
+        ${fixes.length ? `<div class="alert warn small">Typed as text in Excel, so missing from its totals: ${fixes.map(f => `${esc(ITEM[f.item].label)} "${esc(f.text)}"`).join(", ")}.</div>` : ""}</div>` : ""}
+      ${!claims.length && !opening.length ? `<div class="empty">Nothing booked on this plot yet.</div>` : ""}</section>`;
+  if (isQS) $("#editAllow").onclick = () => {
+    $("#allowEdit").innerHTML = `<div class="qty-grid" style="margin-top:12px">${POOLS.map(p => `<div class="qty"><label for="al-${p.key}">${esc(p.label)}</label><input type="number" min="0" id="al-${p.key}" value="${n(a[p.key])}"><small>Tender: ${fq(P.allowance[p.key])}</small></div>`).join("")}</div>
+      <div class="row" style="margin-top:10px"><button class="btn primary sm" id="saveAllow" type="button">Save allowance</button><button class="btn sm" id="resetAllow" type="button">Back to tender figures</button></div>`;
+    $("#saveAllow").onclick = () => { S.allowanceOverrides[no] = Object.fromEntries(POOLS.map(p => [p.key, n($(`#al-${p.key}`).value)])); save(); toast("Allowance saved"); route(); };
+    $("#resetAllow").onclick = () => { delete S.allowanceOverrides[no]; save(); route(); };
+  };
+  app.oninput = null; app.onchange = null; app.onclick = null;
+}
+
+/* ---------- payments ---------- */
+function viewPayments(app, runArg) {
+  if (!["qs", "accounts"].includes(S.user.role)) { app.innerHTML = `<div class="empty">Payment runs are for the QS and Accounts.</div>`; return; }
+  const appr = S.claims.filter(c => c.status === "approved");
+  const thisRun = payRun(new Date().toISOString());
+  const runs = [...new Set([thisRun, ...appr.map(c => payRun(c.qs.at))])].sort().reverse();
+  const run = runArg && runs.includes(runArg) ? runArg : thisRun;
+  const inRun = appr.filter(c => payRun(c.qs.at) === run);
+  const by = {};
+  inRun.forEach(c => payees(c).forEach(p => { (by[p.name] = by[p.name] || { amount: 0, claims: [] }); by[p.name].amount += p.amount; by[p.name].claims.push(c.id + (p.pct < 100 ? ` (${fq(p.pct)}%)` : "")); }));
+  const total = Object.values(by).reduce((a, x) => a + x.amount, 0);
+  const cutoff = new Date(run + "T10:00:00");
+  app.innerHTML = `<h1>Payment run</h1>
+    <p class="muted">Every claim the QS approves before Thursday 10:00 goes into that Thursday's run, already signed off by the bricklayer, foreman and QS. This replaces the stapled pack.</p>
+    <div class="row noprint" style="margin-bottom:12px"><select class="field" id="runSel" style="width:auto" aria-label="Payment run">${runs.map(r => `<option value="${r}" ${r === run ? "selected" : ""}>Thursday ${fdate(r)}${r === thisRun ? " (next run)" : ""}</option>`).join("")}</select>
+      <button class="btn sm" id="pcsv" type="button">Export CSV</button><button class="btn sm" type="button" onclick="print()">Print</button></div>
+    <div class="stats"><div class="stat"><b>${money(total)}</b><span>Total to pay</span></div><div class="stat"><b>${Object.keys(by).length}</b><span>People</span></div><div class="stat"><b>${inRun.length}</b><span>Claims</span></div>
+      <div class="stat"><b class="small" style="font-size:1rem">${cutoff.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })} 10:00</b><span>Cut-off</span></div></div>
+    <section class="card"><h2>By person</h2>${Object.keys(by).length ? `<div class="tablewrap"><table><thead><tr><th>Paid to</th><th>Claims</th><th class="num">Amount</th></tr></thead>
+      <tbody>${Object.entries(by).sort().map(([k, v]) => `<tr><td><b>${esc(k)}</b></td><td class="small">${esc(v.claims.join(", "))}</td><td class="num">${money(v.amount)}</td></tr>`).join("")}</tbody>
+      <tfoot><tr><td colspan="2">Total</td><td class="num">${money(total)}</td></tr></tfoot></table></div>` : `<div class="empty">Nothing approved for this run yet. Claims show up here as soon as the QS approves them.</div>`}</section>
+    ${inRun.length ? `<section class="card"><h2>Claims in this run</h2><div class="tablewrap"><table><thead><tr><th>Claim</th><th>Bricklayer</th><th>Plots</th><th>Approved</th><th class="num">Value</th></tr></thead>
+      <tbody>${inRun.map(c => `<tr class="click" onclick="location.hash='#/claim/${c.id}'"><td>${esc(c.id)}</td><td>${esc(c.bricklayer)}</td><td>${esc(plotsLabel(c))}</td><td class="small">${esc(c.foreman.name)} / ${esc(c.qs.name)}</td><td class="num">${money(claimValue(c))}</td></tr>`).join("")}</tbody></table></div></section>` : ""}`;
+  $("#runSel").onchange = e => location.hash = "#/payments/" + e.target.value;
+  $("#pcsv").onclick = () => {
+    const rows = [["Payment run", "Claim", "Site", "Plots", "Bricklayer", "Paid to", "Share %", "Amount", "Foreman", "QS", "Approved"]];
+    inRun.forEach(c => payees(c).forEach(p => rows.push([run, c.id, SEED.site.code, plotsLabel(c), c.bricklayer, p.name, p.pct, p.amount.toFixed(2), c.foreman.name, c.qs.name, fdt(c.qs.at)])));
+    download(`payment-run-${run}.csv`, toCsv(rows));
+  };
+  app.oninput = null; app.onchange = null; app.onclick = null;
+}
+
+/* ---------- settings ---------- */
+function viewSettings(app) {
+  if (S.user.role !== "qs") { app.innerHTML = `<div class="empty">Settings are for the QS.</div>`; return; }
+  const cols = ITEMS.map(i => i.key).concat("daywork");
+  const lab = k => k === "daywork" ? "Daywork / hr" : ITEM[k].label;
+  app.innerHTML = `<h1>Rates and setup</h1>
+    <section class="card"><h2>Bricklayer rates</h2><p class="muted small">From "Up To Date Bricky Rates". Changes apply to claims that haven't been approved yet. STANDARD is used for anyone not on the list.</p>
+      <div class="tablewrap"><table><thead><tr><th>Bricklayer</th>${cols.map(k => `<th class="num">${esc(lab(k))}</th>`).join("")}</tr></thead>
+      <tbody>${Object.keys(S.rates).sort((a, b) => a === "STANDARD" ? -1 : b === "STANDARD" ? 1 : a.localeCompare(b)).map(name => `<tr><td><b>${esc(name)}</b></td>${cols.map(k => `<td><input type="number" step="0.01" min="0" data-rn="${esc(name)}" data-rk="${k}" value="${n(S.rates[name][k])}" style="width:72px;text-align:right;padding:6px" aria-label="${esc(name)} ${esc(lab(k))}"></td>`).join("")}</tr>`).join("")}</tbody></table></div>
+      <div class="row" style="margin-top:10px"><input type="text" id="newB" placeholder="New bricklayer name" style="max-width:260px"><button class="btn sm" id="addB" type="button">Add (starts on STANDARD rates)</button></div></section>
+    <section class="card"><h2>Site data</h2><dl class="kv"><dt>Site</dt><dd>${esc(SEED.site.code)} ${esc(SEED.site.name)}</dd><dt>Client</dt><dd>${esc(SEED.site.client)}</dd><dt>Plots</dt><dd>${SEED.plots.length}, from ${esc(SEED.site.ledgerRef)}</dd><dt>Allowance edits</dt><dd>${Object.keys(S.allowanceOverrides).length} plot(s)</dd></dl>
+      <p class="muted small">In the full version, a new site is set up by uploading its house type list and drawing measures.</p></section>
+    <section class="card"><h2>Demo data</h2><p class="muted small">Everything in this prototype is saved on this device only. Reset to go back to the starting data and the two demo claims.</p>
+      <button class="btn danger" id="reset" type="button">Reset demo data</button></section>`;
+  app.oninput = e => { const t = e.target; if (t.dataset.rn) { S.rates[t.dataset.rn][t.dataset.rk] = n(t.value); save(); } };
+  app.onchange = null; app.onclick = null;
+  $("#addB").onclick = () => { const v = $("#newB").value.trim(); if (!v || S.rates[v]) return; S.rates[v] = clone(S.rates.STANDARD); save(); toast(v + " added"); route(); };
+  $("#reset").onclick = () => { if (confirm("Reset all claims, rates and allowances to the starting data?")) { S = fresh(); save(); toast("Demo data reset"); location.hash = "#/"; route(); } };
+}
+
+/* ---------- export ---------- */
+function toCsv(rows) { return rows.map(r => r.map(v => { const s = String(v ?? ""); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; }).join(",")).join("\r\n"); }
+function download(name, text) {
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "text/csv" })); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+route();
+</script>
+</body>
+</html>

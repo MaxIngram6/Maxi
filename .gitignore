@@ -1,0 +1,6 @@
+# Generated from company spreadsheets: contains bricklayer names, rates and site photos.
+# The repo is public, so keep these local. Rebuild with build_data.py + build.py.
+prototype/data.js
+prototype/Eurogold-Brickwork-Payments.html
+*.xlsx
+*.xlsm
